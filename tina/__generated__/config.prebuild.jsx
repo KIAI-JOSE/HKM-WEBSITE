@@ -12,7 +12,7 @@ var config_default = defineConfig({
       publicFolder: "public"
     }
   },
-  // Enable local mode for development without TinaCloud
+  // Local development configuration
   isLocal: true,
   // See docs on content modeling for more info on how to setup new content models: https://tina.io/docs/schema/
   schema: {
