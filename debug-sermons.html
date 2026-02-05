@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Sermons</title>
+</head>
+<body>
+    <h1>Debug Sermon IDs</h1>
+    <div id="output"></div>
+    
+    <script type="module">
+        // Import the API
+        import { api } from './services/api.js';
+        
+        async function debugSermons() {
+            try {
+                const sermons = await api.getSermons();
+                console.log('Sermons:', sermons);
+                
+                const output = document.getElementById('output');
+                output.innerHTML = '<pre>' + JSON.stringify(sermons, null, 2) + '</pre>';
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('output').innerHTML = 'Error: ' + error.message;
+            }
+        }
+        
+        debugSermons();
+    </script>
+</body>
+</html>
