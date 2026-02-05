@@ -78,6 +78,52 @@ export const api = {
   },
 
   // ---------------------------------------------------------------------------
+  // STAFF
+  // ---------------------------------------------------------------------------
+  getStaff: async () => {
+    if (ENABLE_TINA) {
+      try {
+        const response = await client.queries.staffConnection();
+        const staff = response.data.staffConnection.edges?.map((edge: any) => {
+          const filename = edge?.node?.id?.split('/').pop()?.replace('.mdx', '') || edge?.node?.id || '';
+          
+          return {
+            id: filename,
+            name: edge?.node?.name || '',
+            role: edge?.node?.role || '',
+            image: edge?.node?.image || 'https://picsum.photos/seed/staff_fallback/400/400',
+            bio: edge?.node?.bio || ''
+          };
+        }) || [];
+        
+        console.log('TinaCMS Staff loaded:', staff);
+        return staff;
+      } catch (error) {
+        console.warn("CMS Load Failed (Staff). Using fallback data.", error);
+      }
+    }
+    
+    // FALLBACK
+    await delay(600);
+    return [
+      {
+        id: 's1',
+        name: 'Rev. Dr. John Doe',
+        role: 'Senior Pastor',
+        bio: 'Rev. Doe has served HKM Ministries for over 20 years with a passion for teaching.',
+        image: 'https://picsum.photos/seed/pastor1/400/400'
+      },
+      {
+        id: 's2',
+        name: 'Pastor Jane Smith',
+        role: 'Executive Pastor',
+        bio: 'Pastor Jane oversees the day-to-day operations and women\'s ministry.',
+        image: 'https://picsum.photos/seed/pastor2/400/400'
+      }
+    ];
+  },
+
+  // ---------------------------------------------------------------------------
   // EVENTS
   // ---------------------------------------------------------------------------
   getEvents: async (): Promise<Event[]> => {

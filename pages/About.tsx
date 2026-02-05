@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { STAFF } from '../constants';
-import { Star, Book } from 'lucide-react';
+import { Star, Book, Loader2 } from 'lucide-react';
+import { api } from '../services/api';
 
 const About: React.FC = () => {
+  const [staff, setStaff] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStaff = async () => {
+      try {
+        const staffData = await api.getStaff();
+        setStaff(staffData);
+      } catch (error) {
+        console.error('Failed to load staff:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStaff();
+  }, []);
   return (
     <div className="bg-white">
       {/* Header */}
@@ -91,18 +108,40 @@ const About: React.FC = () => {
       {/* Leadership */}
       <div className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-serif font-bold text-church-900 text-center mb-12">Our Leadership Team</h2>
-        <div className="grid md:grid-cols-3 gap-10">
-          {STAFF.map((member) => (
-            <div key={member.id} className="text-center group">
-              <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden shadow-lg border-4 border-white group-hover:border-church-100 transition-colors">
-                <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+        
+        {loading ? (
+          <div className="flex justify-center items-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-church-600" />
+            <span className="ml-2 text-gray-600">Loading staff...</span>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-3 gap-10">
+            {staff.map((member) => (
+              <div key={member.id} className="text-center group">
+                <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden shadow-lg border-4 border-white group-hover:border-church-100 transition-colors">
+                  <img 
+                    src={member.image} 
+                    alt={member.name} 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'https://picsum.photos/seed/staff_fallback/400/400';
+                    }}
+                  />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
+                <p className="text-church-600 font-medium mb-3">{member.role}</p>
+                <p className="text-gray-500 text-sm max-w-xs mx-auto">{member.bio}</p>
               </div>
-              <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
-              <p className="text-church-600 font-medium mb-3">{member.role}</p>
-              <p className="text-gray-500 text-sm max-w-xs mx-auto">{member.bio}</p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
+        
+        {!loading && staff.length === 0 && (
+          <div className="text-center py-12 text-gray-500">
+            <p>No staff members found.</p>
+          </div>
+        )}
       </div>
     </div>
   );
