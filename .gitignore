@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# TinaCMS
+.tina/__generated__
+admin
+public/admin

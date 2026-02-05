@@ -1,0 +1,74 @@
+fragment SermonsParts on Sermons {
+  __typename
+  title
+  speaker
+  date
+  series
+  videoUrl
+  thumbnail
+  topics
+  body
+}
+
+fragment EventsParts on Events {
+  __typename
+  title
+  date
+  time
+  location
+  image
+  description
+  body
+}
+
+fragment BlogParts on Blog {
+  __typename
+  title
+  excerpt
+  author
+  date
+  image
+  category
+  body
+}
+
+fragment StaffParts on Staff {
+  __typename
+  name
+  role
+  image
+  bio
+  body
+}
+
+fragment GalleryParts on Gallery {
+  __typename
+  title
+  category
+  imageUrl
+  body
+}
+
+fragment PagesParts on Pages {
+  __typename
+  title
+  slug
+  description
+  body
+}
+
+fragment SettingsParts on Settings {
+  __typename
+  churchName
+  churchAddress
+  churchPhone
+  churchEmail
+  logoUrl
+  googleMapsUrl
+  socialLinks {
+    __typename
+    facebook
+    youtube
+    instagram
+  }
+}

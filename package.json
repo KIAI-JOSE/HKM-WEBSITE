@@ -6,13 +6,20 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "tina:dev": "tinacms dev",
+    "tina:build": "tinacms build",
+    "tina:admin": "tinacms admin",
+    "dev:with-tina": "tinacms dev -c \"vite\""
   },
   "dependencies": {
-    "react": "^19.2.4",
-    "react-router-dom": "^7.13.0",
+    "@tinacms/auth": "^1.1.2",
+    "@tinacms/cli": "^2.1.5",
     "lucide-react": "^0.563.0",
-    "react-dom": "^19.2.4"
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-router-dom": "^7.13.0",
+    "tinacms": "^3.4.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
