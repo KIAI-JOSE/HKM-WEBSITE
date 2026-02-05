@@ -8,12 +8,16 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 // 🟢 TOGGLE THIS TO TRUE TO USE TINA CMS
 const ENABLE_TINA = true;
 
+// Check if we're in production and TinaCMS is available
+const isProduction = import.meta.env.PROD;
+const hasTinaCredentials = import.meta.env.VITE_TINA_CLIENT_ID || process.env.NEXT_PUBLIC_TINA_CLIENT_ID;
+
 export const api = {
   // ---------------------------------------------------------------------------
   // SERMONS
   // ---------------------------------------------------------------------------
   getSermons: async (): Promise<Sermon[]> => {
-    if (ENABLE_TINA) {
+    if (ENABLE_TINA && (!isProduction || hasTinaCredentials)) {
       try {
         const response = await client.queries.sermonsConnection();
         const sermons = response.data.sermonsConnection.edges?.map((edge: any) => {
