@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Search, Filter, PlayCircle, Loader2 } from 'lucide-react';
 import { Sermon } from '../types';
 import { api } from '../services/api';
@@ -79,15 +80,17 @@ const Sermons: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredSermons.map((sermon) => (
               <div key={sermon.id} className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all overflow-hidden flex flex-col h-full group animate-in fade-in duration-500">
-                <div className="relative aspect-video">
+                <Link to={`/sermon/${sermon.id}`} className="relative aspect-video">
                   <img src={sermon.thumbnail} alt={sermon.title} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <PlayCircle className="w-16 h-16 text-white" />
                   </div>
-                </div>
+                </Link>
                 <div className="p-6 flex-1 flex flex-col">
                   <div className="text-sm text-church-600 font-semibold mb-2 font-nav">{sermon.date}</div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 font-serif">{sermon.title}</h3>
+                  <Link to={`/sermon/${sermon.id}`}>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 font-serif hover:text-church-700 transition-colors">{sermon.title}</h3>
+                  </Link>
                   <p className="text-gray-600 text-sm mb-4">Speaker: <span className="font-medium">{sermon.speaker}</span></p>
                   
                   <div className="mt-auto pt-4 border-t border-gray-100 flex justify-between items-center">
@@ -96,7 +99,12 @@ const Sermons: React.FC = () => {
                         <span key={t} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded font-nav">{t}</span>
                       ))}
                     </div>
-                    <button className="text-church-600 hover:text-church-800 font-medium text-sm font-nav">Watch Now</button>
+                    <Link 
+                      to={`/sermon/${sermon.id}`}
+                      className="text-church-600 hover:text-church-800 font-medium text-sm font-nav"
+                    >
+                      Watch Now
+                    </Link>
                   </div>
                 </div>
               </div>

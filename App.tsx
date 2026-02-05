@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import About from './pages/About';
 import Sermons from './pages/Sermons';
+import SermonDetail from './pages/SermonDetail';
 import Events from './pages/Events';
 import Give from './pages/Give';
 import Contact from './pages/Contact';
@@ -36,6 +37,7 @@ const App: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/sermons" element={<Sermons />} />
+            <Route path="/sermon/:id" element={<SermonDetail />} />
             <Route path="/events" element={<Events />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/gallery" element={<Gallery />} />

@@ -122,7 +122,7 @@ const Home: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {FEATURED_SERMONS.map((sermon) => (
-              <div key={sermon.id} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden group border border-gray-100">
+              <Link key={sermon.id} to={`/sermon/${sermon.id}`} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden group border border-gray-100">
                 <div className="relative aspect-video overflow-hidden">
                   <img src={sermon.thumbnail} alt={sermon.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
@@ -141,7 +141,7 @@ const Home: React.FC = () => {
                     ))}
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
