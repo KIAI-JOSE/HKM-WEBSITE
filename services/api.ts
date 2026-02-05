@@ -9,13 +9,13 @@ import { Sermon, Event, BlogPost, GalleryItem } from '../types';
 // ==============================================================================
 
 const TINA_CONFIG = {
-  CLIENT_ID: '',    // e.g. 'a2b3c4d5-...'
-  TOKEN: '',        // e.g. '7812638...'
-  BRANCH: 'main',   // The branch Tina is pushing to
+  CLIENT_ID: 'bc437c5c-80db-4ebb-abcf-1300be1b4bfc',
+  TOKEN: '2bbb24d795baeaa734b7b768a383af9bf716b618',
+  BRANCH: 'kiro',   // Using the kiro branch
 };
 
 // 🟢 TOGGLE THIS TO TRUE TO USE TINA CMS
-const ENABLE_TINA = false; 
+const ENABLE_TINA = true; 
 
 // ==============================================================================
 
@@ -55,7 +55,7 @@ export const api = {
     if (ENABLE_TINA) {
       const query = `
         query {
-          sermonConnection(sort: "date", last: 10) {
+          sermonsConnection(sort: "date", last: 10) {
             edges {
               node {
                 id
@@ -65,6 +65,7 @@ export const api = {
                 series
                 thumbnail
                 topics
+                videoUrl
               }
             }
           }
@@ -72,12 +73,13 @@ export const api = {
       `;
       try {
         const data = await fetchTina(query);
-        return data.sermonConnection.edges.map((edge: any) => ({
+        return data.sermonsConnection.edges.map((edge: any) => ({
           id: edge.node.id,
           title: edge.node.title,
           speaker: edge.node.speaker,
-          date: edge.node.date, // Assumes date string 'YYYY-MM-DD'
+          date: edge.node.date,
           series: edge.node.series,
+          videoUrl: edge.node.videoUrl,
           thumbnail: edge.node.thumbnail || 'https://picsum.photos/seed/sermon_fallback/800/450',
           topics: edge.node.topics || []
         }));
@@ -103,7 +105,7 @@ export const api = {
     if (ENABLE_TINA) {
       const query = `
         query {
-          eventConnection(sort: "date", first: 10) {
+          eventsConnection(sort: "date", first: 10) {
             edges {
               node {
                 id
@@ -120,13 +122,13 @@ export const api = {
       `;
       try {
         const data = await fetchTina(query);
-        return data.eventConnection.edges.map((edge: any) => ({
+        return data.eventsConnection.edges.map((edge: any) => ({
           id: edge.node.id,
           title: edge.node.title,
           date: new Date(edge.node.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
           time: edge.node.time,
           location: edge.node.location,
-          description: edge.node.description, // Plain text or needs parsing if Rich Text
+          description: edge.node.description,
           image: edge.node.image || 'https://picsum.photos/seed/event_fallback/800/600'
         }));
       } catch (error) {
@@ -146,7 +148,7 @@ export const api = {
     if (ENABLE_TINA) {
       const query = `
         query {
-          postConnection(sort: "date", last: 10) {
+          blogConnection(sort: "date", last: 10) {
             edges {
               node {
                 id
@@ -156,7 +158,6 @@ export const api = {
                 date
                 category
                 image
-                # content is usually rich text in Tina, ignored here for list view
               }
             }
           }
@@ -164,7 +165,7 @@ export const api = {
       `;
       try {
         const data = await fetchTina(query);
-        return data.postConnection.edges.map((edge: any) => ({
+        return data.blogConnection.edges.map((edge: any) => ({
           id: edge.node.id,
           title: edge.node.title,
           excerpt: edge.node.excerpt,
