@@ -183,8 +183,36 @@ export const api = {
   // ---------------------------------------------------------------------------
   // GALLERY
   // ---------------------------------------------------------------------------
-  getGallery: async (): Promise<GalleryItem[]> => {
+  getGallery: async () => {
+    if (ENABLE_TINA) {
+      try {
+        const response = await client.queries.galleryConnection();
+        const gallery = response.data.galleryConnection.edges?.map((edge: any) => {
+          const filename = edge?.node?.id?.split('/').pop()?.replace('.mdx', '') || edge?.node?.id || '';
+          
+          return {
+            id: filename,
+            title: edge?.node?.title || '',
+            category: edge?.node?.category || '',
+            imageUrl: edge?.node?.imageUrl || 'https://picsum.photos/seed/gallery_fallback/600/600'
+          };
+        }) || [];
+        
+        console.log('TinaCMS Gallery loaded:', gallery);
+        return gallery;
+      } catch (error) {
+        console.warn("CMS Load Failed (Gallery). Using fallback data.", error);
+      }
+    }
+    
     await delay(600);
-    return GALLERY_IMAGES;
+    return [
+      { id: 'g1', title: 'Worship Night', category: 'Events', imageUrl: 'https://picsum.photos/seed/g1/600/600' },
+      { id: 'g2', title: 'Community Picnic', category: 'Outreach', imageUrl: 'https://picsum.photos/seed/g2/600/600' },
+      { id: 'g3', title: 'Baptism Sunday', category: 'Service', imageUrl: 'https://picsum.photos/seed/g3/600/600' },
+      { id: 'g4', title: 'Youth Retreat', category: 'Youth', imageUrl: 'https://picsum.photos/seed/g4/600/600' },
+      { id: 'g5', title: 'Christmas Production', category: 'Events', imageUrl: 'https://picsum.photos/seed/g5/600/600' },
+      { id: 'g6', title: 'Food Drive', category: 'Outreach', imageUrl: 'https://picsum.photos/seed/g6/600/600' },
+    ];
   }
 };
