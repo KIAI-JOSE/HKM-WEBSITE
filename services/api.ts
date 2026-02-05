@@ -16,16 +16,21 @@ export const api = {
     if (ENABLE_TINA) {
       try {
         const response = await client.queries.sermonsConnection();
-        const sermons = response.data.sermonsConnection.edges?.map((edge: any) => ({
-          id: edge?.node?.id || '',
-          title: edge?.node?.title || '',
-          speaker: edge?.node?.speaker || '',
-          date: edge?.node?.date || '',
-          series: edge?.node?.series || '',
-          videoUrl: edge?.node?.videoUrl || '',
-          thumbnail: edge?.node?.thumbnail || 'https://picsum.photos/seed/sermon_fallback/800/450',
-          topics: edge?.node?.topics || []
-        })) || [];
+        const sermons = response.data.sermonsConnection.edges?.map((edge: any) => {
+          // Extract filename from the full path for cleaner IDs
+          const filename = edge?.node?.id?.split('/').pop()?.replace('.mdx', '') || edge?.node?.id || '';
+          
+          return {
+            id: filename,
+            title: edge?.node?.title || '',
+            speaker: edge?.node?.speaker || '',
+            date: edge?.node?.date || '',
+            series: edge?.node?.series || '',
+            videoUrl: edge?.node?.videoUrl || '',
+            thumbnail: edge?.node?.thumbnail || 'https://picsum.photos/seed/sermon_fallback/800/450',
+            topics: edge?.node?.topics || []
+          };
+        }) || [];
         
         console.log('TinaCMS Sermons loaded:', sermons);
         return sermons;
@@ -41,6 +46,35 @@ export const api = {
         { ...FEATURED_SERMONS[0], id: '4', title: 'Walking in Faith', date: '2023-09-24', topics: ['Faith', 'Discipleship'] },
         { ...FEATURED_SERMONS[1], id: '5', title: 'The Heart of Worship', date: '2023-09-17', topics: ['Worship'] },
     ];
+  },
+
+  // Get single sermon by ID
+  getSermon: async (id: string): Promise<Sermon | null> => {
+    if (ENABLE_TINA) {
+      try {
+        const response = await client.queries.sermons({ relativePath: `${id}.mdx` });
+        const sermon = response.data.sermons;
+        
+        if (sermon) {
+          return {
+            id: id,
+            title: sermon.title || '',
+            speaker: sermon.speaker || '',
+            date: sermon.date || '',
+            series: sermon.series || '',
+            videoUrl: sermon.videoUrl || '',
+            thumbnail: sermon.thumbnail || 'https://picsum.photos/seed/sermon_fallback/800/450',
+            topics: sermon.topics || []
+          };
+        }
+      } catch (error) {
+        console.warn("CMS Load Failed (Single Sermon). Using fallback data.", error);
+      }
+    }
+    
+    // FALLBACK: Get from the list
+    const sermons = await api.getSermons();
+    return sermons.find(s => s.id === id) || null;
   },
 
   // ---------------------------------------------------------------------------

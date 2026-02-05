@@ -13,14 +13,13 @@ const SermonDetail: React.FC = () => {
   useEffect(() => {
     const fetchSermon = async () => {
       try {
-        // Get all sermons and find the one with matching ID
-        const sermons = await api.getSermons();
-        const foundSermon = sermons.find(s => s.id === id);
-        
-        if (foundSermon) {
-          setSermon(foundSermon);
-        } else {
-          setError('Sermon not found');
+        if (id) {
+          const foundSermon = await api.getSermon(id);
+          if (foundSermon) {
+            setSermon(foundSermon);
+          } else {
+            setError('Sermon not found');
+          }
         }
       } catch (err) {
         setError('Failed to load sermon');
