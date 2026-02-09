@@ -28,5 +28,9 @@ npm run build
 echo "🔐 Fixing permissions..."
 sudo chown -R www-data:www-data /var/www/HKM-WEBSITE/dist
 
+# Reload Nginx to clear cache
+echo "🔄 Reloading Nginx..."
+sudo systemctl reload nginx
+
 echo "✅ Deployment complete!"
 echo "🌐 Your site is now live with the latest changes."
