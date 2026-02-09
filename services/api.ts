@@ -10,7 +10,7 @@ const ENABLE_TINA = true;
 
 // Check if we're in production and TinaCMS is available
 const isProduction = import.meta.env.PROD;
-const hasTinaCredentials = import.meta.env.VITE_TINA_CLIENT_ID || process.env.NEXT_PUBLIC_TINA_CLIENT_ID;
+const hasTinaCredentials = import.meta.env.VITE_NEXT_PUBLIC_TINA_CLIENT_ID || import.meta.env.NEXT_PUBLIC_TINA_CLIENT_ID;
 
 export const api = {
   // ---------------------------------------------------------------------------
