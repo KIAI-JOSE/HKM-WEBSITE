@@ -12,12 +12,30 @@ const ENABLE_TINA = true;
 const isProduction = import.meta.env.PROD;
 const hasTinaCredentials = import.meta.env.VITE_NEXT_PUBLIC_TINA_CLIENT_ID || import.meta.env.NEXT_PUBLIC_TINA_CLIENT_ID;
 
+// In production without local TinaCMS server, use fallback data
+const useTinaInProduction = !isProduction || (isProduction && !hasTinaCredentials);
+
 export const api = {
   // ---------------------------------------------------------------------------
   // SERMONS
   // ---------------------------------------------------------------------------
   getSermons: async (): Promise<Sermon[]> => {
-    if (ENABLE_TINA && (!isProduction || hasTinaCredentials)) {
+    // In production, use pre-generated JSON files
+    if (isProduction) {
+      try {
+        const response = await fetch('/api/sermons.json');
+        if (response.ok) {
+          const sermons = await response.json();
+          console.log('Static sermons loaded:', sermons);
+          return sermons;
+        }
+      } catch (error) {
+        console.warn("Failed to load static sermons:", error);
+      }
+    }
+    
+    // In development, use TinaCMS
+    if (ENABLE_TINA && !isProduction) {
       try {
         const response = await client.queries.sermonsConnection();
         const sermons = response.data.sermonsConnection.edges?.map((edge: any) => {
@@ -54,6 +72,12 @@ export const api = {
 
   // Get single sermon by ID
   getSermon: async (id: string): Promise<Sermon | null> => {
+    // In production, use pre-generated JSON
+    if (isProduction) {
+      const sermons = await api.getSermons();
+      return sermons.find(s => s.id === id) || null;
+    }
+    
     if (ENABLE_TINA) {
       try {
         const response = await client.queries.sermons({ relativePath: `${id}.mdx` });
@@ -85,6 +109,18 @@ export const api = {
   // STAFF
   // ---------------------------------------------------------------------------
   getStaff: async () => {
+    // In production, use pre-generated JSON
+    if (isProduction) {
+      try {
+        const response = await fetch('/api/staff.json');
+        if (response.ok) {
+          return await response.json();
+        }
+      } catch (error) {
+        console.warn("Failed to load static staff:", error);
+      }
+    }
+    
     if (ENABLE_TINA) {
       try {
         const response = await client.queries.staffConnection();
@@ -131,6 +167,18 @@ export const api = {
   // EVENTS
   // ---------------------------------------------------------------------------
   getEvents: async (): Promise<Event[]> => {
+    // In production, use pre-generated JSON
+    if (isProduction) {
+      try {
+        const response = await fetch('/api/events.json');
+        if (response.ok) {
+          return await response.json();
+        }
+      } catch (error) {
+        console.warn("Failed to load static events:", error);
+      }
+    }
+    
     if (ENABLE_TINA) {
       try {
         const response = await client.queries.eventsConnection();
@@ -159,6 +207,18 @@ export const api = {
   // BLOG POSTS
   // ---------------------------------------------------------------------------
   getBlogPosts: async (): Promise<BlogPost[]> => {
+    // In production, use pre-generated JSON
+    if (isProduction) {
+      try {
+        const response = await fetch('/api/blog.json');
+        if (response.ok) {
+          return await response.json();
+        }
+      } catch (error) {
+        console.warn("Failed to load static blog:", error);
+      }
+    }
+    
     if (ENABLE_TINA) {
       try {
         const response = await client.queries.blogConnection();
@@ -188,6 +248,18 @@ export const api = {
   // GALLERY
   // ---------------------------------------------------------------------------
   getGallery: async () => {
+    // In production, use pre-generated JSON
+    if (isProduction) {
+      try {
+        const response = await fetch('/api/gallery.json');
+        if (response.ok) {
+          return await response.json();
+        }
+      } catch (error) {
+        console.warn("Failed to load static gallery:", error);
+      }
+    }
+    
     if (ENABLE_TINA) {
       try {
         const response = await client.queries.galleryConnection();

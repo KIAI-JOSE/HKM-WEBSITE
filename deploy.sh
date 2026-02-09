@@ -22,7 +22,13 @@ npm install
 
 # Build the project
 echo "🔨 Building production bundle..."
+sudo rm -rf /var/www/HKM-WEBSITE/dist
 npm run build
+
+# Add cache-busting timestamp to index.html
+echo "⏰ Adding cache-busting timestamp..."
+TIMESTAMP=$(date +%s)
+sudo sed -i "s|</title>|</title><meta name=\"build-version\" content=\"$TIMESTAMP\">|" /var/www/HKM-WEBSITE/dist/index.html
 
 # Fix permissions
 echo "🔐 Fixing permissions..."
