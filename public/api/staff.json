@@ -1,16 +1,16 @@
 [
   {
     "id": "JOSEPH-KIAI",
-    "name": "",
-    "role": "",
-    "image": "",
-    "bio": ""
+    "name": "JOSEPH KIAI",
+    "role": "overseer",
+    "image": "/uploads/PASSPORT.png",
+    "bio": "Overseer Dr. Joseph is a senior leader and overseer at HKM Ministries International. "
   },
   {
     "id": "rev-john-doe",
-    "name": "",
-    "role": "",
-    "image": "",
-    "bio": ""
+    "name": "BISHOP DR. GEORGE",
+    "role": "BISHOP",
+    "image": "/uploads/BISHOP GEORGE.jpg",
+    "bio": "BISHOP GEORGE IS THE CORE FOUNDER OF HKM MINISTRIES INTERNATIONAL,"
   }
 ]

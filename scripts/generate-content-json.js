@@ -22,33 +22,72 @@ if (!fs.existsSync(outputDir)) {
 
 // Function to parse frontmatter from MDX files
 function parseMDX(content) {
-  const frontmatterRegex = /^---\n([\s\S]*?)\n---/;
+  const frontmatterRegex = /^---\r?\n([\s\S]*?)\r?\n---/;
   const match = content.match(frontmatterRegex);
   
-  if (!match) return {};
+  if (!match) {
+    console.log('No frontmatter match found');
+    return {};
+  }
   
   const frontmatter = {};
-  const lines = match[1].split('\n');
+  const lines = match[1].split(/\r?\n/);
   
   let currentKey = null;
-  let currentValue = [];
+  let currentArray = [];
+  let inArray = false;
   
-  lines.forEach(line => {
-    if (line.includes(':')) {
-      if (currentKey) {
-        frontmatter[currentKey] = currentValue.length > 1 ? currentValue : currentValue[0];
+  lines.forEach((line, index) => {
+    const trimmed = line.trim();
+    
+    // Skip empty lines
+    if (!trimmed) return;
+    
+    // Check if it's a key-value pair (has colon and doesn't start with -)
+    if (trimmed.includes(':') && !trimmed.startsWith('-')) {
+      // Save previous array if exists
+      if (currentKey && inArray && currentArray.length > 0) {
+        frontmatter[currentKey] = currentArray;
+        currentArray = [];
+        inArray = false;
       }
-      const [key, ...valueParts] = line.split(':');
-      currentKey = key.trim();
-      const value = valueParts.join(':').trim();
-      currentValue = value ? [value] : [];
-    } else if (line.trim().startsWith('-')) {
-      currentValue.push(line.trim().substring(1).trim());
+      
+      const colonIndex = trimmed.indexOf(':');
+      const key = trimmed.substring(0, colonIndex).trim();
+      let value = trimmed.substring(colonIndex + 1).trim();
+      
+      // Remove surrounding quotes if present
+      if ((value.startsWith("'") && value.endsWith("'")) || 
+          (value.startsWith('"') && value.endsWith('"'))) {
+        value = value.slice(1, -1);
+      }
+      
+      currentKey = key;
+      
+      if (value) {
+        // Has a value on the same line
+        frontmatter[key] = value;
+        inArray = false;
+      } else {
+        // Value might be an array on following lines
+        inArray = true;
+      }
+    } else if (trimmed.startsWith('-') && currentKey) {
+      // Array item
+      inArray = true;
+      let item = trimmed.substring(1).trim();
+      // Remove quotes
+      if ((item.startsWith("'") && item.endsWith("'")) || 
+          (item.startsWith('"') && item.endsWith('"'))) {
+        item = item.slice(1, -1);
+      }
+      currentArray.push(item);
     }
   });
   
-  if (currentKey) {
-    frontmatter[currentKey] = currentValue.length > 1 ? currentValue : currentValue[0];
+  // Save last array if exists
+  if (currentKey && inArray && currentArray.length > 0) {
+    frontmatter[currentKey] = currentArray;
   }
   
   return frontmatter;

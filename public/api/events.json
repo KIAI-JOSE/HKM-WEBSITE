@@ -1,29 +1,29 @@
 [
   {
     "id": "SUNDAY-SCHOLL-RETREAT",
-    "title": "",
-    "date": "",
-    "time": "",
-    "location": "",
+    "title": "SUNDAY SCHOLL RETREAT",
+    "date": "2026-04-18T12:05:56.627Z",
+    "time": "FROM 10AM TO 4PM",
+    "location": "GAME PARK",
     "description": "",
-    "image": ""
+    "image": "/uploads/group-of-kids-playing-on-playground-spending-time-in-games-having-fun-fooling-around-children-playing-in-the-park-playground-with-kids-summer-activities-school-yard-with-kids-summer-camp-vector.jpg"
   },
   {
     "id": "WOMEN-CONFERENCE",
-    "title": "",
-    "date": "",
-    "time": "",
-    "location": "",
+    "title": "WOMEN CONFERENCE",
+    "date": "2026-09-19T12:02:58.789Z",
+    "time": "FROM 10AM TO 4PM",
+    "location": "HKM HQ Utawala",
     "description": "",
-    "image": ""
+    "image": "/uploads/HKM CHURCH.jpg"
   },
   {
     "id": "annual-youth-conference",
-    "title": "",
-    "date": "",
-    "time": "",
-    "location": "",
-    "description": "",
-    "image": ""
+    "title": "Annual Youth Conference",
+    "date": "2026-08-15T00:00:00.000Z",
+    "time": "6:00 PM",
+    "location": "HKM Conference Center",
+    "description": "A 3-day event empowering the next generation.",
+    "image": "https://picsum.photos/seed/youth/800/600"
   }
 ]
