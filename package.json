@@ -10,7 +10,10 @@
     "tina:dev": "tinacms dev",
     "tina:build": "tinacms build",
     "tina:admin": "tinacms admin",
-    "dev:with-tina": "tinacms dev --port 4002 --datalayer-port 9002 -c \"vite\""
+    "dev:with-tina": "tinacms dev --port 4002 --datalayer-port 9002 -c \"vite\"",
+    "security:audit": "npm audit",
+    "security:fix": "npm audit fix",
+    "security:check": "npm outdated"
   },
   "dependencies": {
     "@tinacms/auth": "^1.1.2",
